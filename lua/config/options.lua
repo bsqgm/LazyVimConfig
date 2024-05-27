@@ -8,6 +8,10 @@ vim.opt.background = "light"
 local opt = vim.opt
 opt.wrap = true
 
+opt.clipboard = "unnamedplus"
+
+opt.relativenumber = false
+
 local function set_ime(args)
   if args.event:match("Enter$") then
     vim.g.neovide_input_ime = true
