@@ -1,8 +1,3 @@
-
-local cmp = require("cmp")
-
--- cmp.setup({})
-
 return {
   {
     "saadparwaiz1/cmp_luasnip", -- Snippets source for nvim-cmp
@@ -25,8 +20,9 @@ return {
       "hrsh7th/cmp-buffer",
     },
     config = function()
+      local cmp = require("cmp")
       local luasnip = require("luasnip")
-	  local lspkind = require("lspkind")
+      local lspkind = require("lspkind")
       local select_next = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_next_item()
@@ -90,14 +86,13 @@ return {
         sources = {
           { name = "nvim_lsp" },
           { name = "luasnip" },
-        },
-        {
           { name = "nvim_lsp_signature_help" },
           { name = "buffer" },
           { name = "cmp-cmdline" },
           { name = "path" },
         },
       })
+      require("luasnip.loaders.from_vscode").lazy_load()
     end,
   },
   {
