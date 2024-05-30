@@ -94,6 +94,7 @@ return {
       })
       require("luasnip.loaders.from_vscode").lazy_load()
     end,
+  
   },
   {
     "rcarriga/cmp-dap",
@@ -103,6 +104,6 @@ return {
           { name = "dap" },
         },
       })
-    end,
-  },
+    end
+  }
 }

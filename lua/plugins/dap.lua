@@ -8,7 +8,7 @@ return {
     config = function()
       require("mason-nvim-dap").setup({
         -- ['python'] = 'debugpy',
-        ['cppdbg'] = 'cpptools',
+        -- ['cppdbg'] = 'cpptools',
         -- ['delve'] = 'delve',
         -- ['node2'] = 'node-debug2-adapter',
         -- ['chrome'] = 'chrome-debug-adapter',
@@ -26,13 +26,13 @@ return {
         -- ['kotlin'] = 'kotlin-debug-adapter',
         -- ['dart'] = 'dart-debug-adapter',
         -- ['haskell'] = 'haskell-debug-adapter',
-        ensure_installed = { "cppdbg", 'python' },
+        ensure_installed = { "cppdbg", "python" },
         handlers = {
           function(config)
             -- all sources with no handler get passed here
 
             -- Keep original functionality
-            require('mason-nvim-dap').default_setup(config)
+            require("mason-nvim-dap").default_setup(config)
           end,
           python = function(config)
             config.adapters = {
@@ -43,7 +43,7 @@ return {
                 "debugpy.adapter",
               },
             }
-            require('mason-nvim-dap').default_setup(config) -- don't forget this!
+            require("mason-nvim-dap").default_setup(config) -- don't forget this!
           end,
           cppdbg = function(config)
             local pick_file = function()
@@ -51,9 +51,9 @@ return {
                 return string.format("%s", exec_file)
               end
               -- 执行 find 命令并获取结果
-              local command = "find " ..
-                  vim.fn.getcwd() ..
-                  " -type d -name '.git' -prune -o -type f -executable | grep -vE 'third_party|thirdparty|3rdparty'"
+              local command = "find "
+                .. vim.fn.getcwd()
+                .. " -type d -name '.git' -prune -o -type f -executable | grep -vE 'third_party|thirdparty|3rdparty'"
               local handle = io.popen(command)
               local result = handle:read("*a")
               handle:close()
@@ -71,12 +71,12 @@ return {
               local co = coroutine.running()
               if co then
                 return coroutine.create(function()
-                  require('dap.ui').pick_one(relative_files, "Select file: ", label_fn, function(choice)
+                  require("dap.ui").pick_one(relative_files, "Select file: ", label_fn, function(choice)
                     coroutine.resume(co, choice)
                   end)
                 end)
               else
-                return require('dap.ui').pick_one_sync(relative_files, "Select file: ", label_fn)
+                return require("dap.ui").pick_one_sync(relative_files, "Select file: ", label_fn)
               end
             end
 
@@ -171,7 +171,7 @@ return {
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
-      "folke/neodev.nvim"
+      "folke/neodev.nvim",
     },
     config = function()
       require("dapui").setup({
@@ -213,8 +213,8 @@ return {
               },
               {
                 id = "watches",
-                size = 0.4
-              }
+                size = 0.4,
+              },
             },
             position = "left",
             size = 40,
@@ -285,15 +285,15 @@ return {
     config = function()
       local dap_virtual_text = require("nvim-dap-virtual-text")
       dap_virtual_text.setup({
-        enabled = false,                     -- enable this plugin (the default)
-        enabled_commands = true,            -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
+        enabled = false, -- enable this plugin (the default)
+        enabled_commands = true, -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
         highlight_changed_variables = true, -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
-        highlight_new_as_changed = false,   -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
-        show_stop_reason = true,            -- show stop reason when stopped for exceptions
-        commented = false,                  -- prefix virtual text with comment string
-        only_first_definition = false,      -- only show virtual text at first definition (if there are multiple)
-        all_references = true,              -- show virtual text on all all references of the variable (not only definitions)
-        clear_on_continue = false,          -- clear virtual text on "continue" (might cause flickering when stepping)
+        highlight_new_as_changed = false, -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
+        show_stop_reason = true, -- show stop reason when stopped for exceptions
+        commented = false, -- prefix virtual text with comment string
+        only_first_definition = false, -- only show virtual text at first definition (if there are multiple)
+        all_references = true, -- show virtual text on all all references of the variable (not only definitions)
+        clear_on_continue = false, -- clear virtual text on "continue" (might cause flickering when stepping)
         --- A callback that determines how a variable is displayed or whether it should be omitted
         --- @param variable Variable https://microsoft.github.io/debug-adapter-protocol/specification#Types_Variable
         --- @param buf number
@@ -302,21 +302,21 @@ return {
         --- @param options nvim_dap_virtual_text_options Current options for nvim-dap-virtual-text
         --- @return string|nil A text how the virtual text should be displayed or nil, if this variable shouldn't be displayed
         display_callback = function(variable, buf, stackframe, node, options)
-          if options.virt_text_pos == 'inline' then
-            return ' = ' .. variable.value
+          if options.virt_text_pos == "inline" then
+            return " = " .. variable.value
           else
-            return variable.name .. ' = ' .. variable.value
+            return variable.name .. " = " .. variable.value
           end
         end,
         -- position of virtual text, see `:h nvim_buf_set_extmark()`, default tries to inline the virtual text. Use 'eol' to set to end of line
-        virt_text_pos = vim.fn.has 'nvim-0.10' == 1 and 'inline' or 'eol',
+        virt_text_pos = vim.fn.has("nvim-0.10") == 1 and "inline" or "eol",
 
         -- experimental features:
-        all_frames = false,     -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
-        virt_lines = false,     -- show virtual lines instead of virtual text (will flicker!)
-        virt_text_win_col = nil -- position the virtual text at a fixed window column (starting from the first text column) ,
+        all_frames = false, -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+        virt_lines = false, -- show virtual lines instead of virtual text (will flicker!)
+        virt_text_win_col = nil, -- position the virtual text at a fixed window column (starting from the first text column) ,
         -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
       })
     end,
-  }
+  },
 }
